@@ -1,37 +1,93 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE HTML>
+<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>超稿test</title>
+	<meta charset="utf-8"/>
 <style>
-    body { background-color:yellow;}
-    #c1 { background-color: white; }
+#canvas{cursor:crosshair;}
+#red{background:red; width:30px;height: 27px}
+#blue{background:blue; width:30px;height: 27px}
+#yellow{background:yellow; width:30px;height: 27px}
+#white{background:white; width:30px;height: 27px}
+#zi{background:#8B026B; width:30px;height: 27px}
 </style>
-<script>
-window.onload = function() {
-　　var oC = document.getElementById('c1');
-　　var oCG = oC.getContext('2d');
-　　oC.onmousedown = function(ev) {
-    var ev = ev || window.event;
-    oCG.moveTo(ev.clientX-oC.offsetLeft,ev.clientY-oC.offsetTop); //ev.clientX-oC.offsetLeft,ev.clientY-oC.offsetTop鼠标在当前画布上X,Y坐标
-    document.onmousemove = function(ev) {
-        var ev = ev || window.event;//获取event对象
-        oCG.lineTo(ev.clientX-oC.offsetLeft,ev.clientY-oC.offsetTop);
-        oCG.stroke();
-        };
-    oC.onmouseup = function() {
-        document.onmousemove = null;
-        document.onmouseup = null;
-        };
-　　　　};
-};
-</script>
-</head>
  
+</head>
 <body>
-    <canvas id="c1" width="400px" height="400px"> <!--宽高写在html里，写在css里有问题-->
-    <!--代码为博客园米雪321所写-->
-        <span>该浏览器不支持canvas内容</span> <!--对于不支持canvas的浏览器显示-->
-    </canvas>
+<canvas id="canvas" width="600" height="400"> </canvas>
+<!--
+<br><label>画笔颜色：</label>
+<input type="button" id="red" οnclick="linecolor='red'">
+<input type="button" id="blue" οnclick="linecolor='blue'">
+<input type="button" id="yellow" οnclick="linecolor='yellow'">
+<input type="button" id="white" οnclick="linecolor='white'">
+<input type="button" id="zi" οnclick="linecolor='#8B026B'"> 
+<label>画笔宽度：</label>
+<select id="sel">	
+	<option value="4">4</option>
+	<option value="8">8</option>
+	<option value="16">16</option>
+	<option value="30">30</option>
+</select>
+<input type="button" value="生成图片" οnclick="change()"><br>
+<img id="image" src="" width="500px" height="200px">
+ -->
+<script type="text/javascript">
+function change(){
+	document.getElementById("image").src=canvas.toDataURL("image/jpg");
+	//window.open("demo.htm", "height=100px, width=400px");
+	//alert(document.getElementById("image"));
+	}
+//下拉画笔宽度
+window.οnlοad=function(){
+	var huabi=document.getElementById("sel");
+	huabi.οnchange=function(){
+	linw=huabi.value;
+	};
+	//linw=huabi;
+};
+var canvas=document.getElementById("canvas");
+var ctx=canvas.getContext("2d");
+//画一个黑色矩形
+ctx.fillStyle="#002200";
+ctx.fillRect(0,0,600,400);
+//按下标记
+var onoff=false;
+var oldx=-10;
+var oldy=-10;
+//设置颜色默认为白色
+var linecolor="white";
+//宽度默认为4
+var linw=4;
+//鼠标移动事件，事件绑定
+canvas.addEventListener("mousemove",draw,true);
+canvas.addEventListener("mousedown",down,false);
+canvas.addEventListener("mouseup",up,false);
+function down(event){
+	onoff=true;
+	oldx=event.pageX-10;
+	oldy=event.pageY-10;
+	}
+	function up(){
+	onoff=false;
+	}
+	function draw(event){
+	if(onoff==true)
+		{
+		var newx=event.pageX-10;
+		var newy=event.pageY-10;
+		ctx.beginPath();
+		ctx.moveTo(oldx,oldy);
+		ctx.lineTo(newx,newy);
+		ctx.strokeStyle=linecolor;
+		ctx.lineWidth=linw;
+		ctx.lineCap="round";
+		ctx.stroke();
+		
+		oldx=newx;
+		oldy=newy;
+		}
+	}
+</script>
+<!--以上代码为博客园插秧哥所写,个人改-->
 </body>
 </html>
